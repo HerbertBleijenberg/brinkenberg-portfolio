@@ -173,13 +173,18 @@ header{
 .shot{
   position:relative;height:270px;overflow:hidden;background:#EFEDE8;
 }
-.shot img{
-  width:100%;height:600px;object-fit:cover;object-position:top center;
-  display:block;
+.shot .live-wrap{
+  position:absolute;top:0;left:0;
+  width:880px;height:1600px;
+  transform-origin:top left;
+}
+.shot iframe.preview{
+  width:880px;height:1600px;border:0;display:block;background:#fff;
+  pointer-events:none;
   transition:transform 7s cubic-bezier(.33,0,.2,1);
   will-change:transform;
 }
-.card:hover .shot img{transform:translateY(calc(-1 * (600px - 270px)))}
+.card:hover .shot iframe.preview{transform:translateY(calc(-1 * var(--scrollDist,0px)))}
 .shot .shimmer{
   position:absolute;inset:0;
   background:linear-gradient(100deg,#EFEDE8 40%,#F7F5F1 50%,#EFEDE8 60%);
@@ -531,8 +536,6 @@ let lang = "nl";
 let activeDiscipline = "all";
 let activeSitelang = "all";
 
-/* screenshot service: hoge capture voor het scroll-op-hover effect */
-const shotUrl = u => "https://s0.wp.com/mshots/v1/" + encodeURIComponent(u) + "?w=880&h=1600";
 const domainOf = u => new URL(u).hostname.replace(/^www\./,"");
 const t = () => I18N[lang];
 
@@ -585,7 +588,9 @@ function renderGrid(){
         </div>
         <div class="shot">
           <div class="shimmer"></div>
-          <img loading="lazy" alt="Screenshot ${p.name}" src="${shotUrl(p.url)}">
+          <div class="live-wrap">
+            <iframe class="preview" loading="lazy" src="${p.url}" title="Preview ${p.name}" tabindex="-1" sandbox="allow-scripts allow-same-origin"></iframe>
+          </div>
           <span class="hoverhint">${t().scrolling}</span>
         </div>
       </div>
@@ -604,21 +609,27 @@ function renderGrid(){
           <a class="btn btn-live" href="${p.url}" target="_blank" rel="noopener">${t().live} ↗</a>
         </div>
       </div>`;
-    const img=card.querySelector("img");
+    const frame=card.querySelector("iframe.preview");
     const shimmer=card.querySelector(".shimmer");
-    /* mshots genereert de screenshot bij het eerste bezoek en toont tot die tijd
-       een kleine laad-placeholder; blijf proberen tot de echte (brede) capture er is */
-    let tries=0;
-    const retry=()=>{ if(tries++<10) setTimeout(()=>{ img.src=shotUrl(p.url)+"&c="+tries; },4000); };
-    img.addEventListener("load",()=>{
-      if(img.naturalWidth>=500){ shimmer.style.display="none"; }
-      else retry();
-    });
-    img.addEventListener("error",retry);
+    frame.addEventListener("load",()=>{ shimmer.style.display="none"; });
     grid.appendChild(card);
   });
   applyFilter();
+  fitPreviews();
 }
+
+/* schaal de live iframes naar de kaartbreedte en bereken de scroll-afstand voor hover */
+function fitPreviews(){
+  document.querySelectorAll(".card").forEach(c=>{
+    const wrap=c.querySelector(".live-wrap");
+    const shot=c.querySelector(".shot");
+    if(!wrap||!shot) return;
+    const s=shot.clientWidth/880;
+    wrap.style.transform="scale("+s+")";
+    c.style.setProperty("--scrollDist",(1600 - 270/s)+"px");
+  });
+}
+window.addEventListener("resize",fitPreviews);
 
 function applyFilter(){
   let visible=0;
