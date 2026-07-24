@@ -173,6 +173,13 @@ header{
 .shot{
   position:relative;height:270px;overflow:hidden;background:#EFEDE8;
 }
+.shot img.thumb{
+  position:absolute;top:0;left:0;
+  width:100%;height:auto;display:block;
+  transition:transform 7s cubic-bezier(.33,0,.2,1);
+  will-change:transform;
+}
+.card:hover .shot img.thumb{transform:translateY(calc(270px - 100%))}
 .shot .live-wrap{
   position:absolute;top:0;left:0;
   width:880px;height:1600px;
@@ -539,6 +546,16 @@ let activeSitelang = "all";
 const domainOf = u => new URL(u).hostname.replace(/^www\./,"");
 const t = () => I18N[lang];
 
+/* thumbnail per project (bestand in /img). Ontbreekt er één -> live iframe preview */
+const SLUGS = {
+  "bodyboostusa.com":"bodyboost","bevage.com":"bevage","all4spas.nl":"all4spas",
+  "fonteynspas.com":"fonteyn","happythaihats.com":"happythaihats","modelwinkel.nl":"modelwinkel",
+  "passionspas.com":"passionspas","flier-bouw.nl":"flierbouw","de-eikensingel.nl":"eikensingel",
+  "unicos.nl":"unicos","riartistic.nl":"riartistic","lorangerie.nl":"lorangerie"
+};
+const HAS_THUMB = {bodyboost:1,bevage:1,all4spas:1,fonteyn:1,happythaihats:1,modelwinkel:1,passionspas:1,flierbouw:1,riartistic:1,lorangerie:1};
+const slugOf = u => SLUGS[domainOf(u)] || "";
+
 /* ---------- filters ---------- */
 function renderFilters(){
   const el = document.getElementById("filters");
@@ -580,6 +597,10 @@ function renderGrid(){
     card.style.animationDelay=(i*0.05)+"s";
     card.dataset.disciplines=p.disciplines.join(",");
     card.dataset.sitelang=p.sitelang;
+    const slug=slugOf(p.url);
+    const media = HAS_THUMB[slug]
+      ? `<img class="thumb" loading="lazy" alt="Preview ${p.name}" src="shot-${slug}.jpg">`
+      : `<div class="live-wrap"><iframe class="preview" loading="lazy" src="${p.url}" title="Preview ${p.name}" tabindex="-1" sandbox="allow-scripts allow-same-origin"></iframe></div>`;
     card.innerHTML=`
       <div class="frame">
         <div class="frame-bar">
@@ -588,9 +609,7 @@ function renderGrid(){
         </div>
         <div class="shot">
           <div class="shimmer"></div>
-          <div class="live-wrap">
-            <iframe class="preview" loading="lazy" src="${p.url}" title="Preview ${p.name}" tabindex="-1" sandbox="allow-scripts allow-same-origin"></iframe>
-          </div>
+          ${media}
           <span class="hoverhint">${t().scrolling}</span>
         </div>
       </div>
@@ -609,9 +628,9 @@ function renderGrid(){
           <a class="btn btn-live" href="${p.url}" target="_blank" rel="noopener">${t().live} ↗</a>
         </div>
       </div>`;
-    const frame=card.querySelector("iframe.preview");
+    const media=card.querySelector("iframe.preview, img.thumb");
     const shimmer=card.querySelector(".shimmer");
-    frame.addEventListener("load",()=>{ shimmer.style.display="none"; });
+    if(media) media.addEventListener("load",()=>{ shimmer.style.display="none"; });
     grid.appendChild(card);
   });
   applyFilter();
