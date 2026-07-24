@@ -605,12 +605,16 @@ function renderGrid(){
         </div>
       </div>`;
     const img=card.querySelector("img");
-    img.addEventListener("load",()=>{ card.querySelector(".shimmer").style.display="none"; });
-    /* mshots toont eerst een tijdelijke placeholder; één keer verversen na een paar seconden */
-    img.addEventListener("load",function once(){
-      img.removeEventListener("load",once);
-      setTimeout(()=>{ img.src = shotUrl(p.url) + "&r=" + Date.now(); }, 3500);
+    const shimmer=card.querySelector(".shimmer");
+    /* mshots genereert de screenshot bij het eerste bezoek en toont tot die tijd
+       een kleine laad-placeholder; blijf proberen tot de echte (brede) capture er is */
+    let tries=0;
+    const retry=()=>{ if(tries++<10) setTimeout(()=>{ img.src=shotUrl(p.url)+"&c="+tries; },4000); };
+    img.addEventListener("load",()=>{
+      if(img.naturalWidth>=500){ shimmer.style.display="none"; }
+      else retry();
     });
+    img.addEventListener("error",retry);
     grid.appendChild(card);
   });
   applyFilter();
