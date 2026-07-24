@@ -241,6 +241,7 @@ header{
   color:var(--accent-ink);background:var(--accent-soft);
   padding:4px 10px;border-radius:100px;
 }
+.tag.tag-web{background:var(--accent);color:#fff}
 .card-actions{
   margin-top:20px;display:flex;gap:10px;
 }
@@ -510,7 +511,7 @@ const I18N = {
     metaRange:"Van strategie tot oplevering",
     filterAll:"Alles",
     filterLangLabel:"Taal",
-    disciplines:{branding:"Branding & logo",photo:"Fotografie",video:"Video",web:"Web & e-commerce"},
+    disciplines:{website:"Website",branding:"Branding & logo",photo:"Fotografie",video:"Video",web:"Web & e-commerce"},
     sitelangs:{nl:"Nederlands",en:"Engels",multi:"Meertalig"},
     regions:{nl:"Nederland",eu:"Europa",us:"VS"},
     preview:"Snelle preview",
@@ -532,7 +533,7 @@ const I18N = {
     metaRange:"Strategy to shipped",
     filterAll:"All work",
     filterLangLabel:"Language",
-    disciplines:{branding:"Branding & Logo",photo:"Photography",video:"Video",web:"Web & E-commerce"},
+    disciplines:{website:"Website",branding:"Branding & Logo",photo:"Photography",video:"Video",web:"Web & E-commerce"},
     sitelangs:{nl:"Dutch",en:"English",multi:"Multilingual"},
     regions:{nl:"Netherlands",eu:"Europe",us:"USA"},
     preview:"Quick preview",
@@ -565,7 +566,7 @@ const SLUGS = {
 const MODE = {
   bodyboost:"thumb",bevage:"thumb",all4spas:"thumb",fonteyn:"thumb",happythaihats:"thumb",
   modelwinkel:"thumb",passionspas:"thumb",riartistic:"thumb",lorangerie:"thumb",
-  flierbouw:"thumb",unicos:"live",eikensingel:"placeholder"
+  flierbouw:"thumb",unicos:"thumb",eikensingel:"thumb"
 };
 const slugOf = u => SLUGS[domainOf(u)] || "";
 const modeOf = u => MODE[slugOf(u)] || "live";
@@ -584,8 +585,8 @@ function renderFilters(){
   /* disciplines */
   el.appendChild(mkChip(t().filterAll, PROJECTS.length, activeDiscipline==="all",
     ()=>{activeDiscipline="all";renderFilters();applyFilter();}));
-  ["branding","photo","video","web"].forEach(k=>{
-    const n=PROJECTS.filter(p=>p.disciplines.includes(k)).length;
+  ["website","branding","photo","video","web"].forEach(k=>{
+    const n = k==="website" ? PROJECTS.length : PROJECTS.filter(p=>p.disciplines.includes(k)).length;
     el.appendChild(mkChip(t().disciplines[k], n, activeDiscipline===k,
       ()=>{activeDiscipline=k;renderFilters();applyFilter();}));
   });
@@ -638,7 +639,7 @@ function renderGrid(){
           </span>
         </div>
         <p class="desc">${p.desc[lang]}</p>
-        <div class="tags">${p.disciplines.map(d=>'<span class="tag">'+t().disciplines[d]+"</span>").join("")}</div>
+        <div class="tags">${["website"].concat(p.disciplines).map(d=>'<span class="tag'+(d==="website"?" tag-web":"")+'">'+t().disciplines[d]+"</span>").join("")}</div>
         <div class="card-actions">
           <button class="btn btn-preview" data-url="${p.url}" data-mode="${mode}" data-slug="${slug}">${t().preview}</button>
           <a class="btn btn-live" href="${p.url}" target="_blank" rel="noopener">${t().live} ↗</a>
@@ -670,7 +671,7 @@ function applyFilter(){
   let visible=0;
   document.querySelectorAll(".card").forEach(c=>{
     const list=c.dataset.disciplines.split(",").filter(Boolean);
-    const dOK = activeDiscipline==="all" || list.includes(activeDiscipline);
+    const dOK = activeDiscipline==="all" || activeDiscipline==="website" || list.includes(activeDiscipline);
     const lOK = activeSitelang==="all" || c.dataset.sitelang===activeSitelang;
     const show = dOK && lOK;
     c.classList.toggle("hidden",!show);
