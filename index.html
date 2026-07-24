@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brinkenberg — Creative Studio</title>
+<meta name="description" content="Branding, fotografie, video en e-commerce voor merken in Nederland, Europa en de VS.">
+<meta property="og:title" content="Brinkenberg — Creative Studio">
+<meta property="og:description" content="Branding, fotografie, video en e-commerce voor merken in Nederland, Europa en de VS.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://brinkenberg.com/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;450;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FAFAF7;
+  --bg-card:#FFFFFF;
+  --ink:#141412;
+  --ink-soft:#6E6A63;
+  --line:#E8E5DF;
+  --accent:#C4552D;
+  --accent-ink:#A3431F;
+  --accent-soft:#F6E7DF;
+  --radius:18px;
+  --font-display:'Space Grotesk',sans-serif;
+  --font-body:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--accent);color:#fff}
+
+/* ---------- header ---------- */
+header{
+  position:sticky;top:0;z-index:50;
+  background:color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.header-inner{
+  max-width:1280px;margin:0 auto;
+  padding:0 32px;height:68px;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+}
+.wordmark{
+  font-family:var(--font-display);
+  font-weight:700;font-size:19px;letter-spacing:-.02em;
+  text-decoration:none;color:var(--ink);
+  display:flex;align-items:center;gap:10px;
+}
+.wordmark .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);display:inline-block}
+.header-right{display:flex;align-items:center;gap:20px}
+.lang-switch{
+  display:flex;border:1px solid var(--line);border-radius:100px;overflow:hidden;
+}
+.lang-switch button{
+  font-family:var(--font-body);font-size:12.5px;font-weight:600;letter-spacing:.03em;
+  padding:6px 13px;border:0;background:transparent;color:var(--ink-soft);cursor:pointer;
+  transition:all .18s;
+}
+.lang-switch button.active{background:var(--ink);color:#fff}
+.header-contact{
+  font-size:14px;font-weight:500;color:var(--ink-soft);
+  text-decoration:none;white-space:nowrap;
+  transition:color .2s;
+}
+.header-contact:hover{color:var(--accent)}
+@media(max-width:560px){.header-contact{display:none}}
+
+/* ---------- hero ---------- */
+.hero{
+  max-width:1280px;margin:0 auto;
+  padding:110px 32px 72px;
+}
+.hero h1{
+  font-family:var(--font-display);
+  font-size:clamp(48px,8.5vw,118px);
+  font-weight:700;letter-spacing:-.045em;line-height:.97;
+  animation:rise .8s cubic-bezier(.2,.7,.2,1) both;
+}
+.hero h1 .accent{color:var(--accent)}
+.hero p{
+  margin-top:28px;max-width:580px;
+  font-size:clamp(17px,2vw,21px);color:var(--ink-soft);line-height:1.55;
+  animation:rise .8s .12s cubic-bezier(.2,.7,.2,1) both;
+}
+.hero .meta-row{
+  margin-top:36px;display:flex;gap:28px;flex-wrap:wrap;
+  font-size:13.5px;font-weight:500;color:var(--ink-soft);
+  animation:rise .8s .22s cubic-bezier(.2,.7,.2,1) both;
+}
+.hero .meta-row span{display:flex;align-items:center;gap:9px}
+.hero .meta-row .tick{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0}
+@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+
+/* ---------- filter bar ---------- */
+.filterbar{
+  position:sticky;top:68px;z-index:40;
+  background:color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.filterbar-inner{
+  max-width:1280px;margin:0 auto;padding:14px 32px;
+  display:flex;align-items:center;gap:8px;overflow-x:auto;scrollbar-width:none;
+}
+.filterbar-inner::-webkit-scrollbar{display:none}
+.filter-divider{
+  width:1px;height:22px;background:var(--line);flex-shrink:0;margin:0 8px;
+}
+.filter-label{
+  font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-soft);white-space:nowrap;margin-right:2px;
+}
+.chip{
+  font-family:var(--font-body);font-size:13.5px;font-weight:500;
+  padding:8px 16px;border-radius:100px;white-space:nowrap;
+  border:1px solid var(--line);background:var(--bg-card);color:var(--ink-soft);
+  cursor:pointer;transition:all .18s;
+}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.chip.active{background:var(--ink);border-color:var(--ink);color:#fff}
+.chip .count{opacity:.55;margin-left:5px;font-size:12px}
+
+/* ---------- grid ---------- */
+.grid-wrap{max-width:1280px;margin:0 auto;padding:56px 32px 96px}
+.grid{
+  display:grid;gap:36px;
+  grid-template-columns:repeat(auto-fill,minmax(360px,1fr));
+}
+.card{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  overflow:hidden;
+  transition:transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s, opacity .3s, border-color .35s;
+  animation:cardIn .5s cubic-bezier(.2,.7,.2,1) both;
+}
+@keyframes cardIn{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
+.card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 24px 48px -18px rgba(20,20,18,.16);
+  border-color:#DCD8D0;
+}
+.card.hidden{display:none}
+
+/* browser frame */
+.frame{position:relative;background:#EFEDE8;border-bottom:1px solid var(--line)}
+.frame-bar{
+  height:38px;display:flex;align-items:center;gap:8px;padding:0 14px;
+  background:#F4F2EE;border-bottom:1px solid var(--line);
+}
+.frame-bar .dots{display:flex;gap:5px}
+.frame-bar .dots i{width:9px;height:9px;border-radius:50%;background:#DDD9D1}
+.frame-bar .domain{
+  flex:1;text-align:center;
+  font-size:11.5px;color:var(--ink-soft);font-weight:500;
+  background:#fff;border:1px solid var(--line);border-radius:6px;
+  padding:3px 10px;margin:0 8px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  max-width:230px;margin-left:auto;margin-right:auto;
+}
+.shot{
+  position:relative;height:270px;overflow:hidden;background:#EFEDE8;
+}
+.shot img{
+  width:100%;height:600px;object-fit:cover;object-position:top center;
+  display:block;
+  transition:transform 7s cubic-bezier(.33,0,.2,1);
+  will-change:transform;
+}
+.card:hover .shot img{transform:translateY(calc(-1 * (600px - 270px)))}
+.shot .shimmer{
+  position:absolute;inset:0;
+  background:linear-gradient(100deg,#EFEDE8 40%,#F7F5F1 50%,#EFEDE8 60%);
+  background-size:200% 100%;
+  animation:shimmer 1.4s infinite;
+}
+@keyframes shimmer{from{background-position:120% 0}to{background-position:-80% 0}}
+.shot .hoverhint{
+  position:absolute;right:12px;bottom:12px;
+  font-size:10.5px;font-weight:600;letter-spacing:.08em;
+  background:rgba(20,20,18,.72);color:#fff;
+  padding:5px 11px;border-radius:100px;
+  opacity:0;transform:translateY(4px);
+  transition:all .25s;
+  pointer-events:none;
+  backdrop-filter:blur(4px);
+}
+.card:hover .shot .hoverhint{opacity:1;transform:none}
+
+/* card body */
+.card-body{padding:22px 24px 24px}
+.card-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.card h3{
+  font-family:var(--font-display);
+  font-size:21px;font-weight:600;letter-spacing:-.02em;
+}
+.badges{display:flex;gap:6px;flex-shrink:0}
+.badge{
+  font-size:10.5px;font-weight:700;letter-spacing:.07em;
+  color:var(--ink-soft);border:1px solid var(--line);
+  padding:3px 8px;border-radius:6px;white-space:nowrap;
+}
+.card .desc{
+  margin-top:8px;font-size:14.5px;color:var(--ink-soft);line-height:1.5;
+  min-height:44px;
+}
+.tags{margin-top:16px;display:flex;flex-wrap:wrap;gap:6px}
+.tag{
+  font-size:11.5px;font-weight:600;letter-spacing:.02em;
+  color:var(--accent-ink);background:var(--accent-soft);
+  padding:4px 10px;border-radius:100px;
+}
+.card-actions{
+  margin-top:20px;display:flex;gap:10px;
+}
+.btn{
+  flex:1;text-align:center;
+  font-family:var(--font-body);font-size:13.5px;font-weight:600;
+  padding:10px 14px;border-radius:10px;cursor:pointer;
+  text-decoration:none;transition:all .18s;
+  border:1px solid var(--line);
+}
+.btn-preview{background:var(--bg);color:var(--ink)}
+.btn-preview:hover{border-color:var(--ink);background:var(--ink);color:#fff}
+.btn-live{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-live:hover{background:var(--accent-ink);border-color:var(--accent-ink)}
+
+/* empty state */
+.empty{
+  display:none;text-align:center;padding:80px 0;color:var(--ink-soft);
+  font-size:15px;
+}
+
+/* ---------- preview modal ---------- */
+.modal{
+  position:fixed;inset:0;z-index:100;
+  display:none;align-items:center;justify-content:center;
+  padding:4vh 4vw;
+  background:rgba(20,20,18,.55);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+.modal.open{display:flex;animation:fadeIn .25s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-frame{
+  width:100%;height:100%;max-width:1400px;
+  background:var(--bg-card);border-radius:16px;overflow:hidden;
+  display:flex;flex-direction:column;
+  box-shadow:0 40px 100px -20px rgba(0,0,0,.5);
+  animation:pop .3s cubic-bezier(.2,.7,.2,1);
+}
+@keyframes pop{from{transform:scale(.96);opacity:0}to{transform:none;opacity:1}}
+.modal-bar{
+  height:52px;flex-shrink:0;
+  display:flex;align-items:center;gap:12px;padding:0 16px;
+  background:#F4F2EE;border-bottom:1px solid var(--line);
+}
+.modal-bar .domain{
+  flex:1;text-align:center;font-size:13px;color:var(--ink-soft);font-weight:500;
+  background:#fff;border:1px solid var(--line);border-radius:8px;padding:5px 14px;
+  max-width:420px;margin:0 auto;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.modal-bar button,.modal-bar a{
+  font-family:var(--font-body);font-size:13px;font-weight:600;
+  padding:7px 14px;border-radius:8px;cursor:pointer;text-decoration:none;
+  border:1px solid var(--line);background:#fff;color:var(--ink);
+  transition:all .18s;white-space:nowrap;
+}
+.modal-bar a:hover{border-color:var(--accent);color:var(--accent)}
+.modal-bar button:hover{border-color:var(--ink)}
+.modal-body{flex:1;position:relative;background:#EFEDE8}
+.modal-body iframe{width:100%;height:100%;border:0;display:block}
+.modal-body .blocked{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:14px;text-align:center;
+  padding:40px;color:var(--ink-soft);font-size:15px;
+}
+.modal-body .blocked a{
+  font-weight:600;color:#fff;background:var(--accent);
+  padding:11px 22px;border-radius:10px;text-decoration:none;
+}
+
+/* ---------- footer ---------- */
+footer{
+  border-top:1px solid var(--line);
+  background:var(--ink);color:#B8B4AC;
+}
+.footer-inner{
+  max-width:1280px;margin:0 auto;padding:64px 32px;
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px;
+}
+.footer-inner .wordmark{color:#fff;font-size:22px}
+.footer-inner .email{
+  font-size:15px;font-weight:500;color:#fff;text-decoration:none;
+  border-bottom:1px solid rgba(255,255,255,.25);padding-bottom:2px;
+  transition:border-color .2s;
+}
+.footer-inner .email:hover{border-color:var(--accent)}
+.footer-inner .copy{font-size:13px;width:100%;margin-top:8px;opacity:.6}
+
+@media(max-width:640px){
+  .header-inner{padding:0 20px}
+  .hero{padding:72px 20px 48px}
+  .filterbar-inner{padding:12px 20px}
+  .grid-wrap{padding:40px 20px 72px}
+  .grid{grid-template-columns:1fr;gap:28px}
+  .footer-inner{padding:48px 20px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a class="wordmark" href="#"><span class="dot"></span>Brinkenberg</a>
+    <div class="header-right">
+      <div class="lang-switch" id="langSwitch">
+        <button data-lang="nl" class="active">NL</button>
+        <button data-lang="en">EN</button>
+      </div>
+      <a class="header-contact" href="mailto:info@brinkenberg.com">info@brinkenberg.com</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <h1 id="heroTitle"></h1>
+  <p id="heroSub"></p>
+  <div class="meta-row" id="heroMeta"></div>
+</section>
+
+<div class="filterbar">
+  <div class="filterbar-inner" id="filters"></div>
+</div>
+
+<main class="grid-wrap">
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty"></div>
+</main>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="modal-frame">
+    <div class="modal-bar">
+      <button id="modalClose"></button>
+      <div class="domain" id="modalDomain"></div>
+      <a id="modalOpen" href="#" target="_blank" rel="noopener"></a>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <a class="wordmark" href="#"><span class="dot"></span>Brinkenberg</a>
+    <a class="email" href="mailto:info@brinkenberg.com">info@brinkenberg.com</a>
+    <div class="copy" id="footerCopy"></div>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   PROJECTDATA — projecten hier toevoegen of aanpassen.
+   disciplines: "branding" | "photo" | "video" | "web"
+   region: "nl" | "eu" | "us"
+   sitelang: "nl" | "en" | "multi"   (taal van de website zelf)
+   desc: { nl: "...", en: "..." }
+   ============================================================ */
+const PROJECTS = [
+  {
+    name:"BodyBoost", url:"https://bodyboostusa.com/",
+    desc:{
+      nl:"Amerikaans wellness-merk — droge hydromassage en cryo/warmtesystemen voor gyms, spa's en klinieken.",
+      en:"US wellness-equipment brand — dry hydro-massage and cryo/heat systems for gyms, spas and clinics."
+    },
+    disciplines:["branding","photo","web"], region:"us", sitelang:"en"
+  },
+  {
+    name:"Bevage", url:"https://bevage.com/",
+    desc:{
+      nl:"Premium Amerikaans apparaat dat wijn en sterke drank in minuten laat rijpen — verkocht als luxe productervaring.",
+      en:"Premium US device that ages wine and spirits in minutes — sold as a luxury product experience."
+    },
+    disciplines:["photo"], region:"us", sitelang:"en"
+  },
+  {
+    name:"All4Spas", url:"https://www.all4spas.nl/",
+    desc:{
+      nl:"Meertalige Europese webshop voor spa-onderdelen — 19 jaar vakkennis, alles op voorraad.",
+      en:"Multilingual European webshop for spa parts — 19 years of expertise, everything in stock."
+    },
+    disciplines:["photo","web"], region:"eu", sitelang:"multi"
+  },
+  {
+    name:"Fonteyn Spas", url:"https://www.fonteynspas.com/",
+    desc:{
+      nl:"De grootste spa-showroom ter wereld — 1000+ spa's en zwemspa's, levering door heel Europa.",
+      en:"The world's largest spa showroom — 1000+ spa and swim-spa models, shipping across Europe."
+    },
+    disciplines:["video"], region:"eu", sitelang:"multi"
+  },
+  {
+    name:"Happy Thai Hats", url:"https://happythaihats.com/",
+    desc:{
+      nl:"Amerikaans lifestyle-merk — handgestikte, unieke linthoeden, handgemaakt in Chiang Mai.",
+      en:"US lifestyle brand — hand-stitched, one-of-a-kind ribbon hats handcrafted in Chiang Mai."
+    },
+    disciplines:["branding","photo","web"], region:"us", sitelang:"en"
+  },
+  {
+    name:"Modelwinkel", url:"https://modelwinkel.nl/",
+    desc:{
+      nl:"Nederlandse webshop voor handgebouwde, kant-en-klare modelschepen — dezelfde dag verzonden.",
+      en:"Dutch webshop for handmade, fully-assembled model ships — shipped the same day."
+    },
+    disciplines:["branding"], region:"nl", sitelang:"nl"
+  },
+  {
+    name:"Passion Spas", url:"https://passionspas.com/",
+    desc:{
+      nl:"Pan-Europees spa- en zwemspamerk, verkocht in meer dan 25 landen.",
+      en:"Pan-European spa and swim-spa brand, sold in more than 25 countries."
+    },
+    disciplines:[], region:"eu", sitelang:"en"
+  },
+  {
+    name:"Flier Bouw", url:"https://www.flier-bouw.nl/",
+    desc:{
+      nl:"Zelfstandig Nederlands bouwbedrijf — nieuwbouw, renovatie en verbouw, persoonlijk en hands-on.",
+      en:"Independent Dutch building contractor — new-build, renovation and remodelling, personal and hands-on."
+    },
+    disciplines:[], region:"nl", sitelang:"nl"
+  },
+  {
+    name:"De Eikensingel", url:"https://de-eikensingel.nl/",
+    desc:{
+      nl:"Luxe vakantiepark op de Veluwe — privébungalows met hottub, sauna en ijsbad.",
+      en:"Luxury holiday park on the Veluwe — private bungalows with hot tub, sauna and ice bath."
+    },
+    disciplines:["branding","photo","web"], region:"nl", sitelang:"nl"
+  },
+  {
+    name:"Unicos", url:"https://www.unicos.nl/",
+    desc:{
+      nl:"Exclusieve Nederlandse maker van buitenkeukens op maat — vakmanschap in premium materialen.",
+      en:"Exclusive Dutch maker of bespoke outdoor kitchens — craftsmanship in premium materials."
+    },
+    disciplines:["photo"], region:"nl", sitelang:"nl"
+  },
+  {
+    name:"RiArtistic", url:"https://www.riartistic.nl/",
+    desc:{
+      nl:"Kunstatelier van schilderes Ria Huijgen — portretten, dieren en abstract werk.",
+      en:"Art atelier of painter Ria Huijgen — portraits, animals and abstract work."
+    },
+    disciplines:["branding"], region:"nl", sitelang:"nl"
+  },
+  {
+    name:"l'Orangerie", url:"https://www.lorangerie.nl/",
+    desc:{
+      nl:"Nederlandse specialist in tuinkamers, tuinkassen en terrasoverkappingen.",
+      en:"Dutch specialist in garden rooms, greenhouses and terrace canopies."
+    },
+    disciplines:["branding","photo","web"], region:"nl", sitelang:"nl"
+  }
+];
+
+/* ============================================================
+   VERTALINGEN
+   ============================================================ */
+const I18N = {
+  nl:{
+    heroTitle:'Werk dat zichzelf<br>verkoopt<span class="accent">.</span>',
+    heroSub:"Branding, fotografie, video en e-commerce voor merken in Nederland, Europa en de VS.",
+    metaProjects:"12 projecten",
+    metaMarkets:"3 markten — NL · EU · VS",
+    metaRange:"Van strategie tot oplevering",
+    filterAll:"Alles",
+    filterLangLabel:"Taal",
+    disciplines:{branding:"Branding & logo",photo:"Fotografie",video:"Video",web:"Web & e-commerce"},
+    sitelangs:{nl:"Nederlands",en:"Engels",multi:"Meertalig"},
+    regions:{nl:"Nederland",eu:"Europa",us:"VS"},
+    preview:"Snelle preview",
+    live:"Bekijk live",
+    scrolling:"SCROLLT",
+    close:"Sluiten",
+    openLive:"Open live",
+    blocked:"Deze website staat geen ingesloten preview toe.",
+    blockedBtn:"Open de live website",
+    empty:"Geen projecten in deze selectie.",
+    footer:"© 2026 Brinkenberg. Branding · Fotografie · Video · Web & e-commerce",
+    metaDesc:"Branding, fotografie, video en e-commerce voor merken in Nederland, Europa en de VS."
+  },
+  en:{
+    heroTitle:'Work that sells<br>itself<span class="accent">.</span>',
+    heroSub:"Branding, photography, video and e-commerce for brands across the Netherlands, Europe and the US.",
+    metaProjects:"12 projects",
+    metaMarkets:"3 markets — NL · EU · US",
+    metaRange:"Strategy to shipped",
+    filterAll:"All work",
+    filterLangLabel:"Language",
+    disciplines:{branding:"Branding & Logo",photo:"Photography",video:"Video",web:"Web & E-commerce"},
+    sitelangs:{nl:"Dutch",en:"English",multi:"Multilingual"},
+    regions:{nl:"Netherlands",eu:"Europe",us:"USA"},
+    preview:"Quick preview",
+    live:"View live",
+    scrolling:"SCROLLING",
+    close:"Close",
+    openLive:"Open live",
+    blocked:"This site doesn't allow embedded preview.",
+    blockedBtn:"Open the live site",
+    empty:"No projects in this selection.",
+    footer:"© 2026 Brinkenberg. Branding · Photography · Video · Web & E-commerce",
+    metaDesc:"Branding, photography, video and e-commerce for brands across the Netherlands, Europe and the US."
+  }
+};
+
+let lang = "nl";
+let activeDiscipline = "all";
+let activeSitelang = "all";
+
+/* screenshot service: hoge capture voor het scroll-op-hover effect */
+const shotUrl = u => "https://s0.wp.com/mshots/v1/" + encodeURIComponent(u) + "?w=880&h=1600";
+const domainOf = u => new URL(u).hostname.replace(/^www\./,"");
+const t = () => I18N[lang];
+
+/* ---------- filters ---------- */
+function renderFilters(){
+  const el = document.getElementById("filters");
+  el.innerHTML = "";
+  const mkChip = (label,count,isActive,onClick)=>{
+    const b=document.createElement("button");
+    b.className="chip"+(isActive?" active":"");
+    b.innerHTML=label+(count!=null?'<span class="count">'+count+"</span>":"");
+    b.onclick=onClick;
+    return b;
+  };
+  /* disciplines */
+  el.appendChild(mkChip(t().filterAll, PROJECTS.length, activeDiscipline==="all",
+    ()=>{activeDiscipline="all";renderFilters();applyFilter();}));
+  ["branding","photo","video","web"].forEach(k=>{
+    const n=PROJECTS.filter(p=>p.disciplines.includes(k)).length;
+    el.appendChild(mkChip(t().disciplines[k], n, activeDiscipline===k,
+      ()=>{activeDiscipline=k;renderFilters();applyFilter();}));
+  });
+  /* divider + taalfilter */
+  const div=document.createElement("div");div.className="filter-divider";el.appendChild(div);
+  const lbl=document.createElement("span");lbl.className="filter-label";lbl.textContent=t().filterLangLabel;el.appendChild(lbl);
+  el.appendChild(mkChip(t().filterAll, null, activeSitelang==="all",
+    ()=>{activeSitelang="all";renderFilters();applyFilter();}));
+  ["nl","en","multi"].forEach(k=>{
+    const n=PROJECTS.filter(p=>p.sitelang===k).length;
+    el.appendChild(mkChip(t().sitelangs[k], n, activeSitelang===k,
+      ()=>{activeSitelang=k;renderFilters();applyFilter();}));
+  });
+}
+
+/* ---------- grid ---------- */
+function renderGrid(){
+  const grid=document.getElementById("grid");
+  grid.innerHTML="";
+  PROJECTS.forEach((p,i)=>{
+    const card=document.createElement("article");
+    card.className="card";
+    card.style.animationDelay=(i*0.05)+"s";
+    card.dataset.disciplines=p.disciplines.join(",");
+    card.dataset.sitelang=p.sitelang;
+    card.innerHTML=`
+      <div class="frame">
+        <div class="frame-bar">
+          <span class="dots"><i></i><i></i><i></i></span>
+          <span class="domain">${domainOf(p.url)}</span>
+        </div>
+        <div class="shot">
+          <div class="shimmer"></div>
+          <img loading="lazy" alt="Screenshot ${p.name}" src="${shotUrl(p.url)}">
+          <span class="hoverhint">${t().scrolling}</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <h3>${p.name}</h3>
+          <span class="badges">
+            <span class="badge">${t().regions[p.region]}</span>
+            <span class="badge">${t().sitelangs[p.sitelang]}</span>
+          </span>
+        </div>
+        <p class="desc">${p.desc[lang]}</p>
+        <div class="tags">${p.disciplines.map(d=>'<span class="tag">'+t().disciplines[d]+"</span>").join("")}</div>
+        <div class="card-actions">
+          <button class="btn btn-preview" data-url="${p.url}">${t().preview}</button>
+          <a class="btn btn-live" href="${p.url}" target="_blank" rel="noopener">${t().live} ↗</a>
+        </div>
+      </div>`;
+    const img=card.querySelector("img");
+    img.addEventListener("load",()=>{ card.querySelector(".shimmer").style.display="none"; });
+    /* mshots toont eerst een tijdelijke placeholder; één keer verversen na een paar seconden */
+    img.addEventListener("load",function once(){
+      img.removeEventListener("load",once);
+      setTimeout(()=>{ img.src = shotUrl(p.url) + "&r=" + Date.now(); }, 3500);
+    });
+    grid.appendChild(card);
+  });
+  applyFilter();
+}
+
+function applyFilter(){
+  let visible=0;
+  document.querySelectorAll(".card").forEach(c=>{
+    const list=c.dataset.disciplines.split(",").filter(Boolean);
+    const dOK = activeDiscipline==="all" || list.includes(activeDiscipline);
+    const lOK = activeSitelang==="all" || c.dataset.sitelang===activeSitelang;
+    const show = dOK && lOK;
+    c.classList.toggle("hidden",!show);
+    if(show) visible++;
+  });
+  const empty=document.getElementById("empty");
+  empty.textContent=t().empty;
+  empty.style.display = visible? "none":"block";
+}
+
+/* ---------- statische teksten ---------- */
+function renderChrome(){
+  document.documentElement.lang = lang;
+  document.querySelector('meta[name="description"]').setAttribute("content", t().metaDesc);
+  document.getElementById("heroTitle").innerHTML=t().heroTitle;
+  document.getElementById("heroSub").textContent=t().heroSub;
+  document.getElementById("heroMeta").innerHTML=
+    '<span><span class="tick"></span>'+t().metaProjects+'</span>'+
+    '<span><span class="tick"></span>'+t().metaMarkets+'</span>'+
+    '<span><span class="tick"></span>'+t().metaRange+'</span>';
+  document.getElementById("modalClose").textContent="✕ "+t().close;
+  document.getElementById("modalOpen").textContent=t().openLive+" ↗";
+  document.getElementById("footerCopy").textContent=t().footer;
+}
+
+/* ---------- taalwissel ---------- */
+document.getElementById("langSwitch").addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  if(b.dataset.lang===lang) return;
+  lang=b.dataset.lang;
+  try{ localStorage.setItem("bb-lang",lang); }catch(err){}
+  document.querySelectorAll("#langSwitch button").forEach(x=>x.classList.toggle("active",x.dataset.lang===lang));
+  renderChrome(); renderFilters(); renderGrid();
+});
+
+/* ---------- modal live preview ---------- */
+const modal=document.getElementById("modal"),
+      mBody=document.getElementById("modalBody"),
+      mDomain=document.getElementById("modalDomain"),
+      mOpen=document.getElementById("modalOpen");
+
+document.addEventListener("click",e=>{
+  const btn=e.target.closest(".btn-preview");
+  if(!btn) return;
+  const url=btn.dataset.url;
+  mDomain.textContent=domainOf(url);
+  mOpen.href=url;
+  mBody.innerHTML=`<iframe src="${url}" sandbox="allow-scripts allow-same-origin" loading="eager"></iframe>
+    <div class="blocked" style="display:none">
+      <div>${t().blocked}</div>
+      <a href="${url}" target="_blank" rel="noopener">${t().blockedBtn} ↗</a>
+    </div>`;
+  modal.classList.add("open");
+  document.body.style.overflow="hidden";
+  const iframe=mBody.querySelector("iframe"), blocked=mBody.querySelector(".blocked");
+  let loaded=false;
+  iframe.addEventListener("load",()=>{loaded=true;});
+  setTimeout(()=>{ if(!loaded){ iframe.style.display="none"; blocked.style.display="flex"; } },6000);
+});
+function closeModal(){
+  modal.classList.remove("open");
+  mBody.innerHTML="";
+  document.body.style.overflow="";
+}
+document.getElementById("modalClose").onclick=closeModal;
+modal.addEventListener("click",e=>{ if(e.target===modal) closeModal(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeModal(); });
+
+/* ---------- init ---------- */
+try{
+  const saved=localStorage.getItem("bb-lang");
+  if(saved==="en"||saved==="nl") lang=saved;
+  document.querySelectorAll("#langSwitch button").forEach(x=>x.classList.toggle("active",x.dataset.lang===lang));
+}catch(err){}
+renderChrome(); renderFilters(); renderGrid();
+</script>
+</body>
+</html>
