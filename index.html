@@ -566,10 +566,13 @@ const SLUGS = {
 const MODE = {
   bodyboost:"thumb",bevage:"thumb",all4spas:"thumb",fonteyn:"thumb",happythaihats:"thumb",
   modelwinkel:"thumb",passionspas:"thumb",riartistic:"thumb",lorangerie:"thumb",
-  flierbouw:"thumb",unicos:"thumb",eikensingel:"thumb"
+  flierbouw:"live",unicos:"live",eikensingel:"thumb"
 };
+/* volgorde: wat MKB-bedrijven het meest aanspreekt eerst (herkenbaar NL werk, full-service, dan e-commerce, dan internationaal) */
+const ORDER = ["eikensingel","lorangerie","unicos","flierbouw","modelwinkel","riartistic","all4spas","fonteyn","passionspas","happythaihats","bodyboost","bevage"];
 const slugOf = u => SLUGS[domainOf(u)] || "";
 const modeOf = u => MODE[slugOf(u)] || "live";
+const orderOf = u => { const i=ORDER.indexOf(slugOf(u)); return i<0?999:i; };
 
 /* ---------- filters ---------- */
 function renderFilters(){
@@ -606,7 +609,8 @@ function renderFilters(){
 function renderGrid(){
   const grid=document.getElementById("grid");
   grid.innerHTML="";
-  PROJECTS.forEach((p,i)=>{
+  const ordered=PROJECTS.slice().sort((a,b)=>orderOf(a.url)-orderOf(b.url));
+  ordered.forEach((p,i)=>{
     const card=document.createElement("article");
     card.className="card";
     card.style.animationDelay=(i*0.05)+"s";
@@ -615,7 +619,7 @@ function renderGrid(){
     const slug=slugOf(p.url);
     const mode=modeOf(p.url);
     let media;
-    if(mode==="thumb") media=`<img class="thumb" loading="lazy" alt="Preview ${p.name}" src="shot-${slug}.jpg">`;
+    if(mode==="thumb") media=`<img class="thumb" loading="lazy" alt="Preview ${p.name}" src="thumb-${slug}.jpg">`;
     else if(mode==="live") media=`<div class="live-wrap"><iframe class="preview" loading="lazy" src="${p.url}" title="Preview ${p.name}" tabindex="-1" sandbox="allow-scripts allow-same-origin"></iframe></div>`;
     else media=`<div class="ph"><span class="ph-dom">${domainOf(p.url)}</span><span class="ph-cta">${t().live} ↗</span></div>`;
     card.innerHTML=`
@@ -726,7 +730,7 @@ document.addEventListener("click",e=>{
   } else if(mode==="thumb"){
     /* screenshot: volledige scrollbare afbeelding, geen kapot frame */
     mBody.className="modal-body modal-shot";
-    mBody.innerHTML=`<img src="shot-${slug}.jpg" alt="Preview">`;
+    mBody.innerHTML=`<img src="preview-${slug}.jpg" alt="Preview">`;
   } else {
     /* placeholder: netjes doorverwijzen naar de live site */
     mBody.className="modal-body modal-ph";
