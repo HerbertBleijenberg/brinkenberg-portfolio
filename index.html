@@ -180,6 +180,13 @@ header{
   will-change:transform;
 }
 .card:hover .shot img.thumb{transform:translateY(calc(270px - 100%))}
+.shot .ph{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:10px;
+  background:linear-gradient(150deg,#F4F2EE,#E9E5DE);
+}
+.shot .ph .ph-dom{font-family:var(--font-display);font-size:17px;font-weight:600;color:var(--ink)}
+.shot .ph .ph-cta{font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--accent-ink);background:var(--accent-soft);padding:5px 12px;border-radius:100px}
 .shot .live-wrap{
   position:absolute;top:0;left:0;
   width:880px;height:1600px;
@@ -295,6 +302,8 @@ header{
 .modal-bar button:hover{border-color:var(--ink)}
 .modal-body{flex:1;position:relative;background:#EFEDE8}
 .modal-body iframe{width:100%;height:100%;border:0;display:block}
+.modal-body.modal-shot{overflow-y:auto;overflow-x:hidden;background:#EFEDE8;text-align:center}
+.modal-body.modal-shot img{width:100%;max-width:1100px;margin:0 auto;display:block;height:auto}
 .modal-body .blocked{
   position:absolute;inset:0;display:flex;flex-direction:column;
   align-items:center;justify-content:center;gap:14px;text-align:center;
@@ -546,15 +555,20 @@ let activeSitelang = "all";
 const domainOf = u => new URL(u).hostname.replace(/^www\./,"");
 const t = () => I18N[lang];
 
-/* thumbnail per project (bestand in /img). Ontbreekt er één -> live iframe preview */
+/* per project: 'thumb' (statische screenshot), 'live' (embed in iframe), 'placeholder' (blokkeert + nog geen shot) */
 const SLUGS = {
   "bodyboostusa.com":"bodyboost","bevage.com":"bevage","all4spas.nl":"all4spas",
   "fonteynspas.com":"fonteyn","happythaihats.com":"happythaihats","modelwinkel.nl":"modelwinkel",
   "passionspas.com":"passionspas","flier-bouw.nl":"flierbouw","de-eikensingel.nl":"eikensingel",
   "unicos.nl":"unicos","riartistic.nl":"riartistic","lorangerie.nl":"lorangerie"
 };
-const HAS_THUMB = {bodyboost:1,bevage:1,all4spas:1,fonteyn:1,happythaihats:1,modelwinkel:1,passionspas:1,flierbouw:1,riartistic:1,lorangerie:1};
+const MODE = {
+  bodyboost:"thumb",bevage:"thumb",all4spas:"thumb",fonteyn:"thumb",happythaihats:"thumb",
+  modelwinkel:"thumb",passionspas:"thumb",riartistic:"thumb",lorangerie:"thumb",
+  flierbouw:"live",unicos:"live",eikensingel:"placeholder"
+};
 const slugOf = u => SLUGS[domainOf(u)] || "";
+const modeOf = u => MODE[slugOf(u)] || "live";
 
 /* ---------- filters ---------- */
 function renderFilters(){
@@ -598,9 +612,11 @@ function renderGrid(){
     card.dataset.disciplines=p.disciplines.join(",");
     card.dataset.sitelang=p.sitelang;
     const slug=slugOf(p.url);
-    const media = HAS_THUMB[slug]
-      ? `<img class="thumb" loading="lazy" alt="Preview ${p.name}" src="shot-${slug}.jpg">`
-      : `<div class="live-wrap"><iframe class="preview" loading="lazy" src="${p.url}" title="Preview ${p.name}" tabindex="-1" sandbox="allow-scripts allow-same-origin"></iframe></div>`;
+    const mode=modeOf(p.url);
+    let media;
+    if(mode==="thumb") media=`<img class="thumb" loading="lazy" alt="Preview ${p.name}" src="shot-${slug}.jpg">`;
+    else if(mode==="live") media=`<div class="live-wrap"><iframe class="preview" loading="lazy" src="${p.url}" title="Preview ${p.name}" tabindex="-1" sandbox="allow-scripts allow-same-origin"></iframe></div>`;
+    else media=`<div class="ph"><span class="ph-dom">${domainOf(p.url)}</span><span class="ph-cta">${t().live} ↗</span></div>`;
     card.innerHTML=`
       <div class="frame">
         <div class="frame-bar">
@@ -624,13 +640,13 @@ function renderGrid(){
         <p class="desc">${p.desc[lang]}</p>
         <div class="tags">${p.disciplines.map(d=>'<span class="tag">'+t().disciplines[d]+"</span>").join("")}</div>
         <div class="card-actions">
-          <button class="btn btn-preview" data-url="${p.url}">${t().preview}</button>
+          <button class="btn btn-preview" data-url="${p.url}" data-mode="${mode}" data-slug="${slug}">${t().preview}</button>
           <a class="btn btn-live" href="${p.url}" target="_blank" rel="noopener">${t().live} ↗</a>
         </div>
       </div>`;
-    const media=card.querySelector("iframe.preview, img.thumb");
+    const mediaEl=card.querySelector("iframe.preview, img.thumb");
     const shimmer=card.querySelector(".shimmer");
-    if(media) media.addEventListener("load",()=>{ shimmer.style.display="none"; });
+    if(mediaEl) mediaEl.addEventListener("load",()=>{ shimmer.style.display="none"; });
     grid.appendChild(card);
   });
   applyFilter();
@@ -699,20 +715,24 @@ const modal=document.getElementById("modal"),
 document.addEventListener("click",e=>{
   const btn=e.target.closest(".btn-preview");
   if(!btn) return;
-  const url=btn.dataset.url;
+  const url=btn.dataset.url, mode=btn.dataset.mode, slug=btn.dataset.slug;
   mDomain.textContent=domainOf(url);
   mOpen.href=url;
-  mBody.innerHTML=`<iframe src="${url}" sandbox="allow-scripts allow-same-origin" loading="eager"></iframe>
-    <div class="blocked" style="display:none">
-      <div>${t().blocked}</div>
-      <a href="${url}" target="_blank" rel="noopener">${t().blockedBtn} ↗</a>
-    </div>`;
+  if(mode==="live"){
+    /* embeddende sites: toon de echte, scrollbare site */
+    mBody.className="modal-body";
+    mBody.innerHTML=`<iframe src="${url}" sandbox="allow-scripts allow-same-origin" loading="eager"></iframe>`;
+  } else if(mode==="thumb"){
+    /* screenshot: volledige scrollbare afbeelding, geen kapot frame */
+    mBody.className="modal-body modal-shot";
+    mBody.innerHTML=`<img src="shot-${slug}.jpg" alt="Preview">`;
+  } else {
+    /* placeholder: netjes doorverwijzen naar de live site */
+    mBody.className="modal-body modal-ph";
+    mBody.innerHTML=`<div class="blocked"><div>${t().blocked}</div><a href="${url}" target="_blank" rel="noopener">${t().blockedBtn} ↗</a></div>`;
+  }
   modal.classList.add("open");
   document.body.style.overflow="hidden";
-  const iframe=mBody.querySelector("iframe"), blocked=mBody.querySelector(".blocked");
-  let loaded=false;
-  iframe.addEventListener("load",()=>{loaded=true;});
-  setTimeout(()=>{ if(!loaded){ iframe.style.display="none"; blocked.style.display="flex"; } },6000);
 });
 function closeModal(){
   modal.classList.remove("open");
