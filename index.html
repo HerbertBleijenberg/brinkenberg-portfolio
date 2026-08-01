@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Brinkenberg — Creative Studio</title>
-<meta name="description" content="Branding, fotografie, video en e-commerce voor merken in Nederland, Europa en de VS.">
-<meta property="og:title" content="Brinkenberg — Creative Studio">
-<meta property="og:description" content="Branding, fotografie, video en e-commerce voor merken in Nederland, Europa en de VS.">
+<meta name="description" content="Websites die klanten opleveren. Ontworpen om te converteren, met branding, fotografie en video. Voor merken in Nederland, Europa en de VS.">
+<meta property="og:title" content="Brinkenberg — Websites die klanten opleveren">
+<meta property="og:description" content="Websites die klanten opleveren. Ontworpen om te converteren, met branding, fotografie en video. Voor merken in Nederland, Europa en de VS.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://brinkenberg.com/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -504,9 +504,9 @@ const PROJECTS = [
    ============================================================ */
 const I18N = {
   nl:{
-    heroTitle:'Werk dat zichzelf<br>verkoopt<span class="accent">.</span>',
-    heroSub:"Branding, fotografie, video en e-commerce voor merken in Nederland, Europa en de VS.",
-    metaProjects:"12 projecten",
+    heroTitle:'Websites die<br>klanten opleveren<span class="accent">.</span>',
+    heroSub:"Ontworpen om te converteren — met de branding, fotografie en video die er écht uit springen. Voor merken in Nederland, Europa en de VS.",
+    metaProjects:"12 projecten live",
     metaMarkets:"3 markten — NL · EU · VS",
     metaRange:"Van strategie tot oplevering",
     filterAll:"Alles",
@@ -523,12 +523,12 @@ const I18N = {
     blockedBtn:"Open de live website",
     empty:"Geen projecten in deze selectie.",
     footer:"© 2026 Brinkenberg. Branding · Fotografie · Video · Web & e-commerce",
-    metaDesc:"Branding, fotografie, video en e-commerce voor merken in Nederland, Europa en de VS."
+    metaDesc:"Websites die klanten opleveren. Ontworpen om te converteren, met branding, fotografie en video. Voor merken in Nederland, Europa en de VS."
   },
   en:{
-    heroTitle:'Work that sells<br>itself<span class="accent">.</span>',
-    heroSub:"Branding, photography, video and e-commerce for brands across the Netherlands, Europe and the US.",
-    metaProjects:"12 projects",
+    heroTitle:'Websites that<br>win customers<span class="accent">.</span>',
+    heroSub:"Built to convert — with the branding, photography and video that make them stand out. For brands across the Netherlands, Europe and the US.",
+    metaProjects:"12 projects live",
     metaMarkets:"3 markets — NL · EU · US",
     metaRange:"Strategy to shipped",
     filterAll:"All work",
@@ -545,7 +545,7 @@ const I18N = {
     blockedBtn:"Open the live site",
     empty:"No projects in this selection.",
     footer:"© 2026 Brinkenberg. Branding · Photography · Video · Web & E-commerce",
-    metaDesc:"Branding, photography, video and e-commerce for brands across the Netherlands, Europe and the US."
+    metaDesc:"Websites that win customers. Built to convert, with branding, photography and video. For brands across the Netherlands, Europe and the US."
   }
 };
 
@@ -568,11 +568,13 @@ const MODE = {
   modelwinkel:"thumb",passionspas:"thumb",riartistic:"thumb",lorangerie:"thumb",
   flierbouw:"live",unicos:"live",eikensingel:"thumb"
 };
-/* volgorde: wat MKB-bedrijven het meest aanspreekt eerst (herkenbaar NL werk, full-service, dan e-commerce, dan internationaal) */
-const ORDER = ["eikensingel","lorangerie","unicos","flierbouw","modelwinkel","riartistic","all4spas","fonteyn","passionspas","happythaihats","bodyboost","bevage"];
+/* Volgorde per taal: NL toont eerst het herkenbare Nederlandse MKB-werk,
+   EN toont eerst het internationale/Engelstalige werk. */
+const ORDER_NL = ["eikensingel","lorangerie","unicos","flierbouw","modelwinkel","riartistic","all4spas","fonteyn","passionspas","happythaihats","bodyboost","bevage"];
+const ORDER_EN = ["bodyboost","happythaihats","bevage","passionspas","fonteyn","all4spas","eikensingel","lorangerie","unicos","flierbouw","modelwinkel","riartistic"];
 const slugOf = u => SLUGS[domainOf(u)] || "";
 const modeOf = u => MODE[slugOf(u)] || "live";
-const orderOf = u => { const i=ORDER.indexOf(slugOf(u)); return i<0?999:i; };
+const orderOf = u => { const arr = lang==="en"?ORDER_EN:ORDER_NL; const i=arr.indexOf(slugOf(u)); return i<0?999:i; };
 
 /* ---------- filters ---------- */
 function renderFilters(){
@@ -749,11 +751,31 @@ modal.addEventListener("click",e=>{ if(e.target===modal) closeModal(); });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeModal(); });
 
 /* ---------- init ---------- */
-try{
-  const saved=localStorage.getItem("bb-lang");
-  if(saved==="en"||saved==="nl") lang=saved;
-  document.querySelectorAll("#langSwitch button").forEach(x=>x.classList.toggle("active",x.dataset.lang===lang));
-}catch(err){}
+/* Taalkeuze: 1) ?lang= in de URL, 2) eerdere keuze van de bezoeker,
+   3) automatisch op browsertaal — Nederlandstalig krijgt NL, al het overige EN. */
+function detectLang(){
+  try{
+    const q=new URLSearchParams(location.search).get("lang");
+    if(q==="en"||q==="nl") return q;
+  }catch(e){}
+  try{
+    const saved=localStorage.getItem("bb-lang");
+    if(saved==="en"||saved==="nl") return saved;
+  }catch(e){}
+  try{
+    const list=(navigator.languages&&navigator.languages.length)?navigator.languages:[navigator.language||"nl"];
+    for(const l of list){
+      const code=(l||"").toLowerCase();
+      if(code.startsWith("nl")) return "nl";   /* Nederlands / Vlaams */
+      if(code.startsWith("en")) return "en";   /* alle Engelstalige regio's */
+    }
+    /* geen NL en geen EN in de voorkeuren: internationale bezoeker -> Engels */
+    return "en";
+  }catch(e){}
+  return "nl";
+}
+lang=detectLang();
+try{ document.querySelectorAll("#langSwitch button").forEach(x=>x.classList.toggle("active",x.dataset.lang===lang)); }catch(err){}
 renderChrome(); renderFilters(); renderGrid();
 </script>
 </body>
