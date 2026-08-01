@@ -847,8 +847,10 @@ function renderChrome(){
 
 /* ---------- contactformulier ---------- */
 /* Verstuurt naar contact@herbertbleijenberg.com met kopie naar info@brinkenberg.com */
-const FORM_TO = "contact@herbertbleijenberg.com";
-const FORM_CC = "info@brinkenberg.com";
+/* Anonieme sleutel i.p.v. het e-mailadres: houdt het adres uit de broncode (minder spam).
+   Gekoppeld aan info@brinkenberg.com; contact@herbertbleijenberg.com staat in cc. */
+const FORM_TO = "6f095f9b5c1010673643be57d30ac0c5";
+const FORM_CC = "contact@herbertbleijenberg.com";
 
 document.getElementById("contactForm").addEventListener("submit", async e=>{
   e.preventDefault();
