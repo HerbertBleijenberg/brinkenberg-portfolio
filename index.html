@@ -847,14 +847,10 @@ function renderChrome(){
 
 /* ---------- contactformulier ---------- */
 /* Verstuurt naar contact@herbertbleijenberg.com met kopie naar info@brinkenberg.com */
-/* Twee losse verzendingen i.p.v. één met cc — een directe mail komt beter door spamfilters.
-   1) anonieme sleutel gekoppeld aan info@brinkenberg.com (adres blijft uit de broncode)
-   2) rechtstreeks naar contact@herbertbleijenberg.com
-   Zolang minstens één van beide slaagt, ziet de bezoeker een bevestiging. */
-const FORM_ENDPOINTS = [
-  "6f095f9b5c1010673643be57d30ac0c5",
-  "contact@herbertbleijenberg.com"
-];
+/* Anonieme sleutel gekoppeld aan info@brinkenberg.com (adres blijft uit de broncode),
+   met contact@herbertbleijenberg.com in cc — beide adressen ontvangen elke aanvraag. */
+const FORM_TO = "6f095f9b5c1010673643be57d30ac0c5";
+const FORM_CC = "contact@herbertbleijenberg.com";
 
 document.getElementById("contactForm").addEventListener("submit", async e=>{
   e.preventDefault();
@@ -869,22 +865,19 @@ document.getElementById("contactForm").addEventListener("submit", async e=>{
   btn.disabled=true; btn.textContent=t().btnSending;
   const payload={
     _subject:"Nieuwe aanvraag via brinkenberg.com — "+name,
+    _cc:FORM_CC,
     _template:"table",
     _captcha:"false",
     Naam:name, Email:email, Bedrijf:company||"—", Bericht:message,
     Taal:lang.toUpperCase()
   };
-  const send = ep => fetch("https://formsubmit.co/ajax/"+ep,{
-      method:"POST",
-      headers:{"Content-Type":"application/json","Accept":"application/json"},
-      body:JSON.stringify(payload)
-    })
-    .then(r=>r.json().catch(()=>({})))
-    .then(d=>(d.success==="true"||d.success===true));
   try{
-    const results=await Promise.allSettled(FORM_ENDPOINTS.map(send));
-    const anyOk=results.some(r=>r.status==="fulfilled" && r.value===true);
-    if(anyOk){
+    const data=await fetch("https://formsubmit.co/ajax/"+FORM_TO,{
+        method:"POST",
+        headers:{"Content-Type":"application/json","Accept":"application/json"},
+        body:JSON.stringify(payload)
+      }).then(r=>r.json().catch(()=>({})));
+    if(data.success==="true"||data.success===true){
       msg.textContent=t().fOk; msg.className="form-msg ok";
       form.reset();
     }else{ throw new Error("send failed"); }
