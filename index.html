@@ -68,13 +68,14 @@ header{
   transition:all .18s;
 }
 .lang-switch button.active{background:var(--ink);color:#fff}
-.header-contact{
-  font-size:14px;font-weight:500;color:var(--ink-soft);
+.header-cta{
+  font-size:13.5px;font-weight:600;color:#fff;background:var(--accent);
+  border:1px solid var(--accent);
+  padding:8px 16px;border-radius:100px;
   text-decoration:none;white-space:nowrap;
-  transition:color .2s;
+  transition:all .18s;
 }
-.header-contact:hover{color:var(--accent)}
-@media(max-width:560px){.header-contact{display:none}}
+.header-cta:hover{background:var(--accent-ink);border-color:var(--accent-ink)}
 
 /* ---------- hero ---------- */
 .hero{
@@ -315,6 +316,76 @@ header{
   padding:11px 22px;border-radius:10px;text-decoration:none;
 }
 
+/* ---------- CTA ---------- */
+.cta{border-top:1px solid var(--line);background:var(--bg)}
+.cta-inner{
+  max-width:1280px;margin:0 auto;padding:96px 32px;
+  display:grid;grid-template-columns:1.05fr 1fr;gap:64px;align-items:start;
+}
+.cta h2{
+  font-family:var(--font-display);
+  font-size:clamp(34px,4.4vw,54px);font-weight:700;
+  letter-spacing:-.035em;line-height:1.02;
+}
+.cta h2 .accent{color:var(--accent)}
+.cta .cta-sub{
+  margin-top:20px;max-width:440px;
+  font-size:17px;color:var(--ink-soft);line-height:1.55;
+}
+.cta .cta-points{margin-top:28px;display:flex;flex-direction:column;gap:12px}
+.cta .cta-points span{display:flex;align-items:center;gap:10px;font-size:14.5px;color:var(--ink-soft);font-weight:500}
+.cta .cta-points .tick{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.cta .cta-direct{
+  margin-top:28px;font-size:14.5px;color:var(--ink-soft);
+}
+.cta .cta-direct a{color:var(--ink);font-weight:600;text-decoration:none;border-bottom:1px solid var(--line)}
+.cta .cta-direct a:hover{border-color:var(--accent);color:var(--accent)}
+
+.cta-form{
+  background:var(--bg-card);border:1px solid var(--line);
+  border-radius:var(--radius);padding:32px;
+}
+.cta-form .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cta-form label{
+  display:block;font-size:12px;font-weight:600;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--ink-soft);margin-bottom:7px;
+}
+.cta-form .field{margin-bottom:16px}
+.cta-form input,.cta-form textarea{
+  width:100%;font-family:var(--font-body);font-size:15px;color:var(--ink);
+  background:var(--bg);border:1px solid var(--line);border-radius:10px;
+  padding:12px 14px;transition:border-color .18s,background .18s;
+}
+.cta-form input:focus,.cta-form textarea:focus{
+  outline:none;border-color:var(--accent);background:#fff;
+}
+.cta-form textarea{resize:vertical;min-height:118px}
+.cta-form button{
+  width:100%;font-family:var(--font-body);font-size:15px;font-weight:600;
+  padding:14px 20px;border-radius:11px;cursor:pointer;
+  background:var(--accent);border:1px solid var(--accent);color:#fff;
+  transition:all .18s;
+}
+.cta-form button:hover{background:var(--accent-ink);border-color:var(--accent-ink)}
+.cta-form button:disabled{opacity:.6;cursor:default}
+.cta-note{margin-top:12px;font-size:12.5px;color:var(--ink-soft);text-align:center}
+.form-msg{
+  margin-top:16px;padding:13px 16px;border-radius:10px;font-size:14.5px;
+  display:none;line-height:1.45;
+}
+.form-msg.ok{display:block;background:var(--accent-soft);color:var(--accent-ink);font-weight:500}
+.form-msg.err{display:block;background:#FBE9E7;color:#B3261E}
+.hp{position:absolute;left:-9999px;opacity:0;height:0;width:0}
+
+@media(max-width:900px){
+  .cta-inner{grid-template-columns:1fr;gap:40px;padding:72px 32px}
+}
+@media(max-width:640px){
+  .cta-inner{padding:56px 20px}
+  .cta-form{padding:24px}
+  .cta-form .row{grid-template-columns:1fr}
+}
+
 /* ---------- footer ---------- */
 footer{
   border-top:1px solid var(--line);
@@ -353,7 +424,7 @@ footer{
         <button data-lang="nl" class="active">NL</button>
         <button data-lang="en">EN</button>
       </div>
-      <a class="header-contact" href="mailto:info@brinkenberg.com">info@brinkenberg.com</a>
+      <a class="header-cta" href="#contact" id="headerCta"></a>
     </div>
   </div>
 </header>
@@ -383,6 +454,41 @@ footer{
     <div class="modal-body" id="modalBody"></div>
   </div>
 </div>
+
+<section class="cta" id="contact">
+  <div class="cta-inner">
+    <div>
+      <h2 id="ctaTitle"></h2>
+      <p class="cta-sub" id="ctaSub"></p>
+      <div class="cta-points" id="ctaPoints"></div>
+      <p class="cta-direct" id="ctaDirect"></p>
+    </div>
+    <form class="cta-form" id="contactForm" novalidate>
+      <div class="row">
+        <div class="field">
+          <label for="f-name" id="lbName"></label>
+          <input type="text" id="f-name" name="name" required autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="f-email" id="lbEmail"></label>
+          <input type="email" id="f-email" name="email" required autocomplete="email">
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-company" id="lbCompany"></label>
+        <input type="text" id="f-company" name="company" autocomplete="organization">
+      </div>
+      <div class="field">
+        <label for="f-message" id="lbMessage"></label>
+        <textarea id="f-message" name="message" required></textarea>
+      </div>
+      <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button type="submit" id="btnSend"></button>
+      <p class="cta-note" id="ctaNote"></p>
+      <div class="form-msg" id="formMsg"></div>
+    </form>
+  </div>
+</section>
 
 <footer>
   <div class="footer-inner">
@@ -522,6 +628,17 @@ const I18N = {
     blocked:"Deze website staat geen ingesloten preview toe.",
     blockedBtn:"Open de live website",
     empty:"Geen projecten in deze selectie.",
+    ctaTitle:'Klaar voor een website die<br>wél klanten oplevert<span class="accent">?</span>',
+    ctaSub:"Vertel kort wat u wilt bereiken. U krijgt binnen één werkdag een eerlijk antwoord — inclusief of ik de juiste partij ben.",
+    ctaPoints:["Vrijblijvend gesprek, geen verkooppraatje","Vaste prijs vooraf, geen verrassingen","Ook branding, fotografie en video onder één dak"],
+    ctaDirect:"Liever direct mailen? ",
+    lbName:"Naam",lbEmail:"E-mailadres",lbCompany:"Bedrijf (optioneel)",lbMessage:"Waar kan ik mee helpen?",
+    btnSend:"Verstuur aanvraag",btnSending:"Versturen…",
+    ctaNote:"Uw gegevens worden alleen gebruikt om te reageren.",
+    headerCta:"Start een project",
+    fOk:"Bedankt — uw bericht is verstuurd. U hoort binnen één werkdag van mij.",
+    fErrValidate:"Vul uw naam, e-mailadres en bericht in.",
+    fErrSend:"Versturen mislukte. Mail gerust direct naar info@brinkenberg.com.",
     footer:"© 2026 Brinkenberg. Branding · Fotografie · Video · Web & e-commerce",
     metaDesc:"Websites die klanten opleveren. Ontworpen om te converteren, met branding, fotografie en video. Voor merken in Nederland, Europa en de VS."
   },
@@ -544,6 +661,17 @@ const I18N = {
     blocked:"This site doesn't allow embedded preview.",
     blockedBtn:"Open the live site",
     empty:"No projects in this selection.",
+    ctaTitle:'Ready for a website that<br>actually wins customers<span class="accent">?</span>',
+    ctaSub:"Tell me briefly what you want to achieve. You'll get an honest answer within one business day — including whether I'm the right fit.",
+    ctaPoints:["A real conversation, not a sales pitch","Fixed price up front, no surprises","Branding, photography and video under one roof"],
+    ctaDirect:"Prefer to email directly? ",
+    lbName:"Name",lbEmail:"Email address",lbCompany:"Company (optional)",lbMessage:"What can I help you with?",
+    btnSend:"Send enquiry",btnSending:"Sending…",
+    ctaNote:"Your details are only used to reply to you.",
+    headerCta:"Start a project",
+    fOk:"Thanks — your message has been sent. You'll hear from me within one business day.",
+    fErrValidate:"Please fill in your name, email address and message.",
+    fErrSend:"Sending failed. Feel free to email info@brinkenberg.com directly.",
     footer:"© 2026 Brinkenberg. Branding · Photography · Video · Web & E-commerce",
     metaDesc:"Websites that win customers. Built to convert, with branding, photography and video. For brands across the Netherlands, Europe and the US."
   }
@@ -701,7 +829,62 @@ function renderChrome(){
   document.getElementById("modalClose").textContent="✕ "+t().close;
   document.getElementById("modalOpen").textContent=t().openLive+" ↗";
   document.getElementById("footerCopy").textContent=t().footer;
+  /* CTA */
+  document.getElementById("ctaTitle").innerHTML=t().ctaTitle;
+  document.getElementById("ctaSub").textContent=t().ctaSub;
+  document.getElementById("ctaPoints").innerHTML=t().ctaPoints
+    .map(p=>'<span><span class="tick"></span>'+p+"</span>").join("");
+  document.getElementById("ctaDirect").innerHTML=
+    t().ctaDirect+'<a href="mailto:info@brinkenberg.com">info@brinkenberg.com</a>';
+  document.getElementById("lbName").textContent=t().lbName;
+  document.getElementById("lbEmail").textContent=t().lbEmail;
+  document.getElementById("lbCompany").textContent=t().lbCompany;
+  document.getElementById("lbMessage").textContent=t().lbMessage;
+  document.getElementById("btnSend").textContent=t().btnSend;
+  document.getElementById("ctaNote").textContent=t().ctaNote;
+  document.getElementById("headerCta").textContent=t().headerCta;
 }
+
+/* ---------- contactformulier ---------- */
+/* Verstuurt naar contact@herbertbleijenberg.com met kopie naar info@brinkenberg.com */
+const FORM_TO = "contact@herbertbleijenberg.com";
+const FORM_CC = "info@brinkenberg.com";
+
+document.getElementById("contactForm").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const form=e.target, btn=document.getElementById("btnSend"), msg=document.getElementById("formMsg");
+  const name=form.name.value.trim(), email=form.email.value.trim(),
+        company=form.company.value.trim(), message=form.message.value.trim();
+  msg.className="form-msg";
+  if(form._honey.value) return;                       /* spam-bot gevangen */
+  if(!name||!email||!message||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
+    msg.textContent=t().fErrValidate; msg.className="form-msg err"; return;
+  }
+  btn.disabled=true; btn.textContent=t().btnSending;
+  try{
+    const res=await fetch("https://formsubmit.co/ajax/"+FORM_TO,{
+      method:"POST",
+      headers:{"Content-Type":"application/json","Accept":"application/json"},
+      body:JSON.stringify({
+        _subject:"Nieuwe aanvraag via brinkenberg.com — "+name,
+        _cc:FORM_CC,
+        _template:"table",
+        _captcha:"false",
+        Naam:name, Email:email, Bedrijf:company||"—", Bericht:message,
+        Taal:lang.toUpperCase()
+      })
+    });
+    const data=await res.json().catch(()=>({}));
+    if(res.ok && (data.success===undefined || data.success==="true" || data.success===true)){
+      msg.textContent=t().fOk; msg.className="form-msg ok";
+      form.reset();
+    }else{ throw new Error("send failed"); }
+  }catch(err){
+    msg.textContent=t().fErrSend; msg.className="form-msg err";
+  }finally{
+    btn.disabled=false; btn.textContent=t().btnSend;
+  }
+});
 
 /* ---------- taalwissel ---------- */
 document.getElementById("langSwitch").addEventListener("click",e=>{
